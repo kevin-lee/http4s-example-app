@@ -1,6 +1,6 @@
 http4s-example-app
 ==================
-http4s Example App
+[![Build Status](https://semaphoreci.com/api/v1/kevin-lee/http4s-example-app/branches/master/badge.svg)](https://semaphoreci.com/kevin-lee/http4s-example-app)
 
 How to Run
 ----------
