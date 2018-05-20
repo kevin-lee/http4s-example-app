@@ -14,5 +14,10 @@ class HelloWorldService[F[_]: Effect] extends Http4sDsl[F] {
 
       case GET -> Root / name =>
         Ok(Json.obj("message" -> Json.fromString(s"Hello, $name")))
+
+      case GET -> Root / "add" / IntVar(a) / IntVar(b) =>
+        Ok(
+        Json.obj("result" -> Json.fromLong(a.toLong + b.toLong))
+        )
     }
 }

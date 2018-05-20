@@ -32,3 +32,13 @@ Once you get log messages like this
       "message": "Hello, YOUR_NAME"
     }
     ``` 
+
+3. Access [http://localhost:8080/hello/add](http://localhost:8080/hello/add) with two numbers in the path.
+e.g.) [http://localhost:8080/hello/add/2/5](http://localhost:8080/hello/add/2/5)
+    
+    Result:
+    ```json
+    {
+      "result": 7
+    }
+    ```
