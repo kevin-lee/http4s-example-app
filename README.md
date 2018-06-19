@@ -42,3 +42,5 @@ e.g.) [http://localhost:8080/hello/add/2/5](http://localhost:8080/hello/add/2/5)
       "result": 7
     }
     ```
+    
+4. Access [http://localhost:8080/html/index.html](http://localhost:8080/html/index.html) to access an example static html page. It's handled by `StaticHtmlService`.

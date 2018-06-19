@@ -30,7 +30,7 @@ class HelloWorldSpec extends org.specs2.mutable.Specification with ScalaCheck {
           throw failure
       }
       val getHW = Request[IO](Method.GET, uri)
-      new HelloWorldService[IO].service.orNotFound(getHW).unsafeRunSync()
+      HelloWorldService.service.orNotFound(getHW).unsafeRunSync()
     }
 
     implicit def alphaNumString: Arbitrary[String] =

@@ -19,7 +19,7 @@ lazy val root = (project in file("."))
       "-Ywarn-nullary-override",  // Warn when non-nullary overrides nullary, e.g. def foo() over def foo.
       "-Ywarn-numeric-widen"      // Warn when numerics are widened.
     ),
-    wartremoverErrors ++= Warts.allBut(Wart.ImplicitParameter),
+    wartremoverErrors ++= Warts.allBut(Wart.ImplicitParameter, Wart.Nothing),
 
     libraryDependencies ++= Seq(
       "org.http4s"      %% "http4s-blaze-server" % Http4sVersion,
