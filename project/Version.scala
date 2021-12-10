@@ -4,7 +4,7 @@
   */
 object Version {
   val Http4sVersion = "0.18.9"
-  val LogbackVersion = "1.2.3"
+  val LogbackVersion = "1.2.7"
   val Specs2Version = "4.2.0"
   val ScalaCheckVersion = "1.14.0"
 }
