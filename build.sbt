@@ -5,7 +5,7 @@ lazy val root = (project in file("."))
     organization := "io.kevinlee",
     name := "http4s-example-app",
     version := "0.0.1-SNAPSHOT",
-    scalaVersion := "2.12.6",
+    scalaVersion := "2.12.15",
     scalacOptions ++= Seq(
       "-deprecation",             // Emit warning and location for usages of deprecated APIs.
       "-feature",                 // Emit warning and location for usages of features that should be imported explicitly.
