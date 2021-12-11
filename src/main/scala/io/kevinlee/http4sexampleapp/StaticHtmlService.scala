@@ -14,7 +14,7 @@ object StaticHtmlService {
 
       case request @ GET -> Root / filename if filename.endsWith(".html") =>
         StaticFile
-          .fromString[F](s"/$filename", blocker: Blocker, req = request.some)
+          .fromResource[F](name = s"/$filename", blocker, req = request.some)
           .getOrElseF(notFound)
     }
 }
