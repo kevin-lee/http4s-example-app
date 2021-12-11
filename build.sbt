@@ -26,5 +26,5 @@ lazy val root = (project in file("."))
 
 lazy val props = new {
   val extrasVersion   = "0.2.0"
-  val hedgehogVersion = "0.7.0"
+  val hedgehogVersion = "0.8.0"
 }
