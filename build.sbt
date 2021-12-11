@@ -24,5 +24,5 @@ lazy val props = new {
   val Http4sVersion   = "0.22.8"
   val LogbackVersion  = "1.2.7"
   val extrasVersion   = "0.2.0"
-  val hedgehogVersion = "0.7.0"
+  val hedgehogVersion = "0.8.0"
 }
