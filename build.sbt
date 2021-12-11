@@ -1,20 +1,16 @@
-import Version._
+ThisBuild / organization := "io.kevinlee"
+ThisBuild / scalaVersion := "2.13.7"
+ThisBuild / version      := "0.0.1-SNAPSHOT"
 
-lazy val root = (project in file("."))
+lazy val http4sExampleApp = (project in file("."))
   .settings(
-    organization := "io.kevinlee",
-    name         := "http4s-example-app",
-    version      := "0.0.1-SNAPSHOT",
-    scalaVersion := "2.13.7",
+    name := "http4s-example-app",
     wartremoverErrors ++= Warts.allBut(Wart.ImplicitParameter, Wart.Any, Wart.Nothing),
     libraryDependencies ++= Seq(
-      "org.http4s"     %% "http4s-blaze-server" % Http4sVersion,
-      "org.http4s"     %% "http4s-circe"        % Http4sVersion,
-      "org.http4s"     %% "http4s-dsl"          % Http4sVersion,
-      "ch.qos.logback"  % "logback-classic"     % LogbackVersion,
-      "org.specs2"     %% "specs2-core"         % Specs2Version     % Test,
-      "org.specs2"     %% "specs2-scalacheck"   % Specs2Version     % Test,
-      "org.scalacheck" %% "scalacheck"          % ScalaCheckVersion % Test,
+      "org.http4s"    %% "http4s-blaze-server" % props.Http4sVersion,
+      "org.http4s"    %% "http4s-circe"        % props.Http4sVersion,
+      "org.http4s"    %% "http4s-dsl"          % props.Http4sVersion,
+      "ch.qos.logback" % "logback-classic"     % props.LogbackVersion,
     ),
     libraryDependencies ++= Seq(
       "io.kevinlee" %% "extras-cats"     % props.extrasVersion,
@@ -25,6 +21,8 @@ lazy val root = (project in file("."))
   )
 
 lazy val props = new {
+  val Http4sVersion   = "0.22.8"
+  val LogbackVersion  = "1.2.7"
   val extrasVersion   = "0.2.0"
   val hedgehogVersion = "0.7.0"
 }
