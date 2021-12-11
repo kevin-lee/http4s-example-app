@@ -1,74 +1,76 @@
 package io.kevinlee.http4sexampleapp
 
 import cats.effect.IO
+import extras.cats.syntax.all._
+import hedgehog._
+import hedgehog.runner._
 import org.http4s._
-import org.http4s.implicits._
-import org.scalacheck.{Arbitrary, Gen, Shrink}
-import org.specs2.ScalaCheck
+import org.http4s.dsl.Http4sDsl
+import org.http4s.syntax.all._
 
-@SuppressWarnings(Array(
-  "org.wartremover.warts.NonUnitStatements",
-  "org.wartremover.warts.Throw",
-  "org.wartremover.warts.Any"
-))
-class HelloWorldSpec extends org.specs2.mutable.Specification with ScalaCheck {
+object HelloWorldSpec extends Properties {
 
-  private val reducedCombinationShrink = Shrink[String] { s =>
-    (for {
-      n <- s.length to 1 by -1
-      x <- s.combinations(n)
-      if x !== s
-    } yield x).toStream
+  def helloWorldService(testDesc: String): String = s"HelloWorldService $testDesc"
+
+  override def tests: List[Test] = List(
+    example(helloWorldService("""/ should return "Hello, World""""), testSlashShouldReturnHelloWorld),
+    example(helloWorldService("""/ should return 200""""), testSlashShouldReturn200),
+    property(helloWorldService("""/{name} should return "Hello, {name}""""), testSlashNameShouldReturnHelloName),
+    property(helloWorldService("/{name} should return 200"), testSlashNameShouldReturn200),
+    property(
+      helloWorldService("/{add}/int1/int2 should return the result of int1 + int2"),
+      testSlashAddInt1Int2ShouldReturnInt1PlusInt2
+    ),
+  )
+
+  implicit val ioDsl: Http4sDsl[IO] = org.http4s.dsl.io
+
+  def retHelloWorld(path: String): Response[IO] = (for {
+
+    uri <- IO.delay(Uri.fromString(raw"/$path"))
+             .t
+             .foldF(
+               IO.raiseError(_),
+               IO(_)
+             )
+    getHW = Request[IO](Method.GET, uri)
+    response <- HelloWorldService.service[IO].orNotFound(getHW)
+  } yield response).unsafeRunSync()
+
+  def testSlashShouldReturnHelloWorld: Result = {
+    val expected = raw"""{"message":"Hello, World"}"""
+    val actual   = retHelloWorld("").as[String].unsafeRunSync()
+    actual ==== expected
   }
 
-  "HelloWorldService" >> {
-    def retHelloWorld(path: String): Response[IO] = {
-      val uri = Uri.fromString(raw"/$path") match {
-        case Right(url) =>
-          url
-        case Left(failure) =>
-          throw failure
-      }
-      val getHW = Request[IO](Method.GET, uri)
-      HelloWorldService.service.orNotFound(getHW).unsafeRunSync()
-    }
+  def testSlashShouldReturn200: Result = {
+    val expected = Status.Ok
+    val actual   = retHelloWorld("").status
+    actual ==== expected
+  }
 
-    implicit def alphaNumString: Arbitrary[String] =
-      Arbitrary(Gen.alphaNumStr.filter(_.length > 2))
+  def testSlashNameShouldReturnHelloName: Property = for {
+    name <- Gen.string(Gen.alpha, Range.linear(1, 10)).log("name")
+  } yield {
+    val expected = raw"""{"message":"Hello, $name"}"""
+    val actual   = retHelloWorld(name).as[String].unsafeRunSync()
+    actual ==== expected
+  }
 
-    """/ should return "Hello, World"""" >> {
-      val expected = raw"""{"message":"Hello, World"}"""
-      val actual = retHelloWorld("").as[String].unsafeRunSync()
-      actual must be equalTo expected
-    }
-    "/ should return 200" >> {
-      val expected = Status.Ok
-      val actual = retHelloWorld("").status
-      actual must be equalTo expected
-    }
+  def testSlashNameShouldReturn200: Property = for {
+    name <- Gen.string(Gen.alpha, Range.linear(1, 10)).log("name")
+  } yield {
+    val actual = retHelloWorld(name).status
+    actual ==== Status.Ok
+  }
 
-    """/{name} should return "Hello, {name}"""" >> {
-      prop { name: String =>
-        val expected = raw"""{"message":"Hello, $name"}"""
-        val actual = retHelloWorld(name).as[String].unsafeRunSync()
-        actual must be equalTo expected
-      }.setShrink(reducedCombinationShrink)
-    }
-    "/{name} should return 200" >> {
-      prop { name: String =>
-        val actual = retHelloWorld(name).status
-        actual must be equalTo Status.Ok
-      }.setShrink(reducedCombinationShrink)
-    }
-
-    "/{add}/int1/int2 should return the result of int1 + int2" >> {
-      prop { (n1: Int, n2: Int) =>
-        val expected = raw"""{"result":${n1.toLong + n2.toLong}}"""
-        val actual = retHelloWorld(s"add/$n1/$n2").as[String].unsafeRunSync()
-        actual must be equalTo expected
-      }
-    }
-
+  def testSlashAddInt1Int2ShouldReturnInt1PlusInt2: Property = for {
+    n1 <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n1")
+    n2 <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n2")
+  } yield {
+    val expected = raw"""{"result":${(n1.toLong + n2.toLong).toString}}"""
+    val actual   = retHelloWorld(s"add/${n1.toString}/${n2.toString}").as[String].unsafeRunSync()
+    actual ==== expected
   }
 
 }
