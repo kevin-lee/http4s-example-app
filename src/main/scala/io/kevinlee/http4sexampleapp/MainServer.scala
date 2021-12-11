@@ -1,28 +1,29 @@
 package io.kevinlee.http4sexampleapp
 
-import cats.effect.IO
-import fs2.StreamApp.ExitCode
-import fs2.{StreamApp, Stream => Fs2Stream}
-import org.http4s.HttpService
-import org.http4s.server.blaze.BlazeBuilder
+import cats.effect.{Blocker, ExitCode, IO, IOApp, Resource}
+import org.http4s.HttpRoutes
+import org.http4s.blaze.server.BlazeServerBuilder
+import org.http4s.dsl.Http4sDsl
+import org.http4s.dsl.io._
+import org.http4s.server.{Router, Server}
 
-import scala.concurrent.ExecutionContext
+object MainServer extends IOApp {
+  val dsl: Http4sDsl[IO] = org.http4s.dsl.io
 
-object MainServer extends StreamApp[IO] {
-  import scala.concurrent.ExecutionContext.Implicits.global
+  def helloWorldService: HttpRoutes[IO]                   = HelloWorldService.service[IO](implicitly, dsl)
+  def staticHtmlService(blocker: Blocker): HttpRoutes[IO] = StaticHtmlService.service[IO](dsl.NotFound())(blocker)
 
-  def stream(args: List[String], requestShutdown: IO[Unit]): Fs2Stream[IO, ExitCode] = ServerStream.stream
-}
+  override def run(args: List[String]): IO[ExitCode] =
+    app
+      .use(_ => IO.never)
+      .as(ExitCode.Success)
 
-object ServerStream {
-
-  def helloWorldService: HttpService[IO] = HelloWorldService.service
-  def staticHtmlService: HttpService[IO] = StaticHtmlService.service
-
-  def stream(implicit ec: ExecutionContext): Fs2Stream[IO, ExitCode] =
-    BlazeBuilder[IO]
-      .bindHttp(8080, "0.0.0.0")
-      .mountService(helloWorldService, "/hello")
-      .mountService(staticHtmlService, "/html")
-      .serve
+  val app: Resource[IO, Server] = for {
+    blocker <- Blocker[IO]
+    router = Router("/hello" -> helloWorldService, "/html" -> staticHtmlService(blocker)).orNotFound
+    server <- BlazeServerBuilder[IO](executionContext)
+                .bindHttp(8080, "0.0.0.0")
+                .withHttpApp(router)
+                .resource
+  } yield server
 }
