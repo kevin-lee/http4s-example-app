@@ -1,6 +1,6 @@
-addSbtPlugin("org.lyranthe.sbt" % "partial-unification" % "1.1.2")
-//addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.1.3")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10")
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")
 
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.2.1")
+addSbtPlugin("io.kevinlee" %% "sbt-devoops-scala" % "2.14.0")
+addSbtPlugin("io.kevinlee" %% "sbt-devoops-sbt-extra" % "2.14.0")
+
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.4.16")
