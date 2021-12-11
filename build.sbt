@@ -13,18 +13,19 @@ lazy val http4sExampleApp = (project in file("."))
       "ch.qos.logback" % "logback-classic"     % props.LogbackVersion,
     ),
     libraryDependencies ++= Seq(
-      "io.kevinlee" %% "extras-cats"     % props.extrasVersion,
-      "qa.hedgehog" %% "hedgehog-core"   % props.hedgehogVersion,
-      "qa.hedgehog" %% "hedgehog-runner" % props.hedgehogVersion,
-      "qa.hedgehog" %% "hedgehog-sbt"    % props.hedgehogVersion
+      "io.kevinlee" %% "extras-cats"                  % props.extrasVersion,
+      "io.kevinlee" %% "extras-hedgehog-cats-effect3" % props.extrasVersion,
+      "qa.hedgehog" %% "hedgehog-core"                % props.hedgehogVersion,
+      "qa.hedgehog" %% "hedgehog-runner"              % props.hedgehogVersion,
+      "qa.hedgehog" %% "hedgehog-sbt"                 % props.hedgehogVersion
     ).map(_ % Test),
     testFrameworks ~=
       (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
   )
 
 lazy val props = new {
-  val Http4sVersion   = "0.22.8"
+  val Http4sVersion   = "0.23.7"
   val LogbackVersion  = "1.2.7"
-  val extrasVersion   = "0.2.0"
+  val extrasVersion   = "0.3.0"
   val hedgehogVersion = "0.8.0"
 }

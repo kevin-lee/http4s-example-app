@@ -9,12 +9,12 @@ import org.http4s.{HttpRoutes, Response, StaticFile}
   * @since 2018-06-16
   */
 object StaticHtmlService {
-  def service[F[_]: Sync: ContextShift](notFound: => F[Response[F]])(blocker: Blocker): HttpRoutes[F] =
+  def service[F[_]: Sync](notFound: => F[Response[F]]): HttpRoutes[F] =
     HttpRoutes.of[F] {
 
       case request @ GET -> Root / filename if filename.endsWith(".html") =>
         StaticFile
-          .fromResource[F](name = s"/$filename", blocker, req = request.some)
+          .fromResource[F](name = s"/$filename", req = request.some)
           .getOrElseF(notFound)
     }
 }
