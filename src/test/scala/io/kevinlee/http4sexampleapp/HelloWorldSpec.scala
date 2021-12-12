@@ -10,8 +10,6 @@ import org.http4s.syntax.all._
 
 object HelloWorldSpec extends Properties {
 
-  def helloWorldService(testDesc: String): String = s"HelloWorldService $testDesc"
-
   override def tests: List[Test] = List(
     example(helloWorldService("""/ should return "Hello, World""""), testSlashShouldReturnHelloWorld),
     example(helloWorldService("""/ should return 200""""), testSlashShouldReturn200),
@@ -22,6 +20,8 @@ object HelloWorldSpec extends Properties {
       testSlashAddInt1Int2ShouldReturnInt1PlusInt2
     ),
   )
+
+  private def helloWorldService(testDesc: String): String = s"HelloWorldService $testDesc"
 
   implicit val ioDsl: Http4sDsl[IO] = org.http4s.dsl.io
 

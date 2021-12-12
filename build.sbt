@@ -17,7 +17,9 @@ lazy val http4sExampleApp = (project in file("."))
       "qa.hedgehog" %% "hedgehog-core"   % props.hedgehogVersion,
       "qa.hedgehog" %% "hedgehog-runner" % props.hedgehogVersion,
       "qa.hedgehog" %% "hedgehog-sbt"    % props.hedgehogVersion
-    ).map(_ % Test)
+    ).map(_ % Test),
+    testFrameworks ~=
+      (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
   )
 
 lazy val props = new {
