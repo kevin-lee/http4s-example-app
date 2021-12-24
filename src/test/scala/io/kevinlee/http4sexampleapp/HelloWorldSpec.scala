@@ -71,7 +71,7 @@ object HelloWorldSpec extends Properties {
     name <- Gen.string(Gen.alpha, Range.linear(1, 10)).log("name")
   } yield {
     val expected = Status.Ok
-    val actual = retHelloWorld(name).map(_.status)
+    val actual   = retHelloWorld(name).map(_.status)
 
     import CatsEffectRunner._
     implicit val ticker: Ticker = Ticker.withNewTestContext()
