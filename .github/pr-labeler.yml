@@ -1,2 +1,2 @@
-update: [ 'update/**', 'dependabot/**' ]
+dependencies: [ 'update/**', 'dependabot/**' ]
 pr: '**'
