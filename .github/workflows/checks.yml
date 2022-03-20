@@ -1,9 +1,9 @@
-name: Build-All
+name: Check-All
 
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
   pull_request:
     branches:
@@ -14,13 +14,13 @@ env:
 
 jobs:
 
-  build:
+  build-and-check:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         scala:
-          - { name: "Scala 2", version: "2.13.7",    binary-version: "2.13",      java-version: "adopt@1.11", report: "" }
+          - { name: "Scala", java-version: "adopt@1.11", report: "" }
 
     steps:
       - uses: actions/checkout@v3
@@ -35,11 +35,11 @@ jobs:
             ~/.ivy2/cache
             ~/.cache/coursier
             ~/.sbt
-          key: ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
           restore-keys: |
-            ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-
+            ${{ runner.os }}-sbt
 
-      - name: "[Push] Build All for ${{ matrix.scala.name }} ${{ matrix.scala.version }} - ${{ github.run_number }}"
+      - name: "[Push] Build All for ${{ matrix.scala.name }} - ${{ github.run_number }}"
         if: github.event_name == 'push'
         env:
           CURRENT_BRANCH_NAME: ${{ github.ref }}
@@ -53,12 +53,14 @@ jobs:
           echo "RUN_ID=${RUN_ID}"
           echo "RUN_NUMBER=${RUN_NUMBER}"
           echo "Push #${PUSH_NUMBER}"
+          java -version
           echo "JVM_OPTS=${JVM_OPTS}"
           echo "SBT_OPTS=${SBT_OPTS}"
-          java -version
-          .github/workflows/sbt-build-all.sh ${{ matrix.scala.version }}
+          sbt \
+            "+scalafixAll --check" \
+            +scalafmtCheckAll
 
-      - name: "[PR] Build All for ${{ matrix.scala.name }} ${{ matrix.scala.version }} - PR-#${{ github.event.pull_request.number }} - ${{ github.run_number }}"
+      - name: "[PR] Build All for ${{ matrix.scala.name }} - PR-#${{ github.event.pull_request.number }} - ${{ github.run_number }}"
         if: github.event_name == 'pull_request'
         env:
           CURRENT_BRANCH_NAME: ${{ github.base_ref }}
@@ -71,7 +73,9 @@ jobs:
           echo "RUN_ID=${RUN_ID}"
           echo "RUN_NUMBER=${RUN_NUMBER}"
           echo "PR #${PR_NUMBER}"
+          java -version
           echo "JVM_OPTS=${JVM_OPTS}"
           echo "SBT_OPTS=${SBT_OPTS}"
-          java -version
-          .github/workflows/sbt-build-all.sh ${{ matrix.scala.version }} ${{ matrix.scala.report }}
+          sbt \
+            "+scalafixAll --check" \
+            +scalafmtCheckAll
