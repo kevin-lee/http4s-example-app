@@ -4,7 +4,9 @@ ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val http4sExampleApp = (project in file("."))
   .settings(
-    name := "http4s-example-app",
+    name              := "http4s-example-app",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision,
     wartremoverErrors ++= Warts.allBut(Wart.ImplicitParameter, Wart.Any, Wart.Nothing),
     libraryDependencies ++= libs.http4s ++ List(libs.logback) ++ libs.testLibs,
     testFrameworks ~=
