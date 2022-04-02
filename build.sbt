@@ -38,7 +38,7 @@ lazy val libs = new {
 
   lazy val pureconfigCirce       = "com.github.pureconfig" %% "pureconfig-circe"       % props.PureconfigVersion
   lazy val pureconfigGeneric     = "com.github.pureconfig" %% "pureconfig-generic"     % props.PureconfigVersion
-  lazy val pureconfigCatsEffect2 = "com.github.pureconfig" %% "pureconfig-cats-effect" % props.PureconfigVersion
+  lazy val pureconfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % props.PureconfigVersion
   lazy val pureconfigHttp4s      = "com.github.pureconfig" %% "pureconfig-http4s"      % props.PureconfigVersion
 
   lazy val logback = "ch.qos.logback" % "logback-classic" % props.LogbackVersion
@@ -59,7 +59,7 @@ lazy val libs = new {
       refinedPureconfig,
       pureconfigCirce,
       pureconfigGeneric,
-      pureconfigCatsEffect2,
+      pureconfigCatsEffect,
       pureconfigHttp4s,
       extrasCats,
       logback
