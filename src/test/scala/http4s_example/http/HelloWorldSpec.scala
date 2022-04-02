@@ -1,14 +1,16 @@
-package io.kevinlee.http4sexampleapp
+package http4s_example.http
 
 import cats.effect.IO
 import extras.cats.syntax.all._
-import hedgehog._
-import hedgehog.runner._
-import org.http4s._
-import org.http4s.dsl.Http4sDsl
-import org.http4s.syntax.all._
 import extras.hedgehog.cats.effect.CatsEffectRunner
+import hedgehog.runner.{Properties, Test, example, property}
+import hedgehog.{Gen, Property, Range, Result}
+import org.http4s.dsl.Http4sDsl
+import org.http4s.{Method, Request, Response, Status, Uri}
 
+/** @author Kevin Lee
+  * @since 2022-04-02
+  */
 object HelloWorldSpec extends Properties {
 
   override def tests: List[Test] = List(
@@ -29,13 +31,13 @@ object HelloWorldSpec extends Properties {
   def retHelloWorld(path: String): IO[Response[IO]] = for {
 
     uri <- IO.delay(Uri.fromString(raw"/$path"))
-             .t
+             .eitherT
              .foldF(
                IO.raiseError(_),
                IO(_)
              )
     getHW = Request[IO](Method.GET, uri)
-    response <- HelloWorldService.service[IO].orNotFound(getHW)
+    response <- HelloWorldRoutes[IO].orNotFound(getHW)
   } yield response
 
   def testSlashShouldReturnHelloWorld: Result = {

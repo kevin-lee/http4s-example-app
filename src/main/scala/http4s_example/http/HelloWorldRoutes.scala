@@ -1,14 +1,17 @@
-package io.kevinlee.http4sexampleapp
+package http4s_example.http
 
-import cats.effect._
+import cats.effect.Sync
 import io.circe.Json
 import org.http4s.HttpRoutes
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 
-object HelloWorldService {
+/** @author Kevin Lee
+  * @since 2022-04-02
+  */
+object HelloWorldRoutes {
 
-  def service[F[_]: Sync](implicit dsl: Http4sDsl[F]): HttpRoutes[F] = {
+  def apply[F[_]: Sync](implicit dsl: Http4sDsl[F]): HttpRoutes[F] = {
     import dsl._
     HttpRoutes.of[F] {
       case GET -> Root =>
