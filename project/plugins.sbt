@@ -1,6 +1,6 @@
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")
 
-val sbtDevOopsVersion = "2.16.0"
+val sbtDevOopsVersion = "2.19.0"
 
 addSbtPlugin("io.kevinlee" %% "sbt-devoops-scala"     % sbtDevOopsVersion)
 addSbtPlugin("io.kevinlee" %% "sbt-devoops-sbt-extra" % sbtDevOopsVersion)
