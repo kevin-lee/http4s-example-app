@@ -15,7 +15,7 @@ lazy val http4sExampleApp = (project in file("."))
 
 lazy val props = new {
   val NewtypeVersion    = "0.4.4"
-  val RefinedVersion    = "0.9.28"
+  val RefinedVersion    = "0.9.29"
   val Http4sVersion     = "0.23.11"
   val PureconfigVersion = "0.17.1"
   val LogbackVersion    = "1.2.11"
