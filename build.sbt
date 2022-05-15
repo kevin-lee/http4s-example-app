@@ -19,7 +19,7 @@ lazy val props = new {
   val Http4sVersion     = "0.23.11"
   val PureconfigVersion = "0.17.1"
   val LogbackVersion    = "1.2.11"
-  val extrasVersion     = "0.13.0"
+  val extrasVersion     = "0.14.0"
   val hedgehogVersion   = "0.8.0"
 }
 
@@ -36,10 +36,10 @@ lazy val libs = new {
     "org.http4s" %% "http4s-dsl"          % props.Http4sVersion,
   )
 
-  lazy val pureconfigCirce       = "com.github.pureconfig" %% "pureconfig-circe"       % props.PureconfigVersion
-  lazy val pureconfigGeneric     = "com.github.pureconfig" %% "pureconfig-generic"     % props.PureconfigVersion
+  lazy val pureconfigCirce      = "com.github.pureconfig" %% "pureconfig-circe"       % props.PureconfigVersion
+  lazy val pureconfigGeneric    = "com.github.pureconfig" %% "pureconfig-generic"     % props.PureconfigVersion
   lazy val pureconfigCatsEffect = "com.github.pureconfig" %% "pureconfig-cats-effect" % props.PureconfigVersion
-  lazy val pureconfigHttp4s      = "com.github.pureconfig" %% "pureconfig-http4s"      % props.PureconfigVersion
+  lazy val pureconfigHttp4s     = "com.github.pureconfig" %% "pureconfig-http4s"      % props.PureconfigVersion
 
   lazy val logback = "ch.qos.logback" % "logback-classic" % props.LogbackVersion
 
