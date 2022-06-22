@@ -1,5 +1,5 @@
 ThisBuild / organization := "io.kevinlee"
-ThisBuild / scalaVersion := "2.13.7"
+ThisBuild / scalaVersion := "2.13.8"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 lazy val http4sExampleApp = (project in file("."))
@@ -16,11 +16,11 @@ lazy val http4sExampleApp = (project in file("."))
 lazy val props = new {
   val NewtypeVersion    = "0.4.4"
   val RefinedVersion    = "0.9.29"
-  val Http4sVersion     = "0.23.11"
+  val Http4sVersion     = "0.23.12"
   val PureconfigVersion = "0.17.1"
   val LogbackVersion    = "1.2.11"
-  val extrasVersion     = "0.14.0"
-  val hedgehogVersion   = "0.8.0"
+  val extrasVersion     = "0.16.0"
+  val hedgehogVersion   = "0.9.0"
 }
 
 lazy val libs = new {
